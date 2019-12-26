@@ -1,4 +1,5 @@
 const { exec } = require('../db/mysql')
+const xss = require('xss')
 
 const getList = (author, keyword) => {
     let sql = `select * from blogs where 1=1 `
@@ -22,8 +23,8 @@ const getDetail = (id) => {
 }
 
 const newBlog = (blogData = {}) => {
-    const title = blogData.title
-    const content = blogData.content
+    const title = xss(blogData.title) // 防止XSS攻击
+    const content = xss(blogData.content)
     const author = blogData.author
     const createTime = Date.now()
 
@@ -40,8 +41,8 @@ const newBlog = (blogData = {}) => {
 }
 
 const updateBlog = (id, blogData = {}) => {
-    const title = blogData.title
-    const content = blogData.content
+    const title = xss(blogData.title)
+    const content = xss(blogData.content)
     const sql = `
         update blogs set title = '${title}', content = '${content}' where id = ${id}
     `

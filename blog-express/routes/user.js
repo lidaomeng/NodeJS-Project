@@ -3,6 +3,7 @@ var router = express.Router();
 const { loginCheck } = require('../controller/user')
 const { SuccessModel, ErrorModel} = require('../model/resModel')
 
+// 1.用户登录
 router.post('/login', function(req, res, next) {
     const { username, password } = req.body
     const result = loginCheck(username, password)
@@ -23,19 +24,19 @@ router.post('/login', function(req, res, next) {
     })
 });
 
-router.get('/login-test', (req, res, next) => {
-    if (req.session.username) {
-        res.json({
-            errno: 0,
-            msg: '已经登录'
-        })
-        return
-    }
-    res.json({
-        errno: -1,
-        msg: '未登录'
-    })
-})
+// router.get('/login-test', (req, res, next) => {
+//     if (req.session.username) {
+//         res.json({
+//             errno: 0,
+//             msg: '已经登录'
+//         })
+//         return
+//     }
+//     res.json({
+//         errno: -1,
+//         msg: '未登录'
+//     })
+// })
 
 // router.get('/session-test', function(req, res, next) {
 //     const session = req.session

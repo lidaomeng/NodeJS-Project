@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var fs = require('fs');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
@@ -17,6 +18,19 @@ var app = express();
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {
+  app.use(logger('dev'));
+} else {
+  // 生产环境
+  const logFileName = path.join(__dirname, 'logs', 'access.log')
+  const ws = fs.createWriteStream(logFileName, {
+    flags: 'a'
+  })
+  app.use(logger('combined', {
+    stream: ws
+  }));
+}
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -8,6 +8,8 @@ var logger = require('morgan');
 // var usersRouter = require('./routes/users');
 const blogRouter = require('./routes/blog');
 const userRouter = require('./routes/user');
+const session = require('express-session')
+const RedisStore = require('connect-redis')(session)
 
 var app = express();
 
@@ -20,6 +22,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
+
+const rc = require('./db/redis')
+const sessionStore = new RedisStore({
+  client: rc
+})
+app.use(session({
+  secret: 'LIDAOmeng_666lidm#',
+  cookie: {
+    // path: '/', // 默认配置
+    // httpOnly: true, // 默认配置
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  store: sessionStore
+}))
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
